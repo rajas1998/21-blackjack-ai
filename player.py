@@ -31,16 +31,13 @@ for i in range(10,5,-1):
 for i in hard:
 	print i," - ",sum(i)
 
+###########################################
 
+bestPayoff = [[0.0 for i in range(12)] for i in range(22)]
+for i in range(12):
+	bestPayoff[21][i] = standPayoff[21][i] 
 
+###########################################
 
-
-
-
-
-
-
-
-
-
-
+split = [0.0 for i in range(10)]
+lone = [0.0 for i in range(10)]
