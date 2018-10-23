@@ -84,7 +84,7 @@ for j in range(22):
 			standPayoff[11][j] += soft[11][k] * (-1)
 		elif (17 + k < j):
 			standPayoff[11][j] += soft[11][k] * (1)
-	standPayoff[11][j] += hard[11][5] * 1
+	standPayoff[11][j] += soft[11][5] * 1
 
 standPayoff[11][21] += p * (-1)
 standPayoff[10][21] += complement_p * (-1)
@@ -148,7 +148,7 @@ for i in range(12):
 	bestSoftHitOrStandPayoff[i][21] = standPayoff[i][21]
 
 for i in range(2,12,1):
-	for j in range(20,12,-1):
+	for j in range(20,11,-1):
 		hitPayoff = 0.0
 		doublePayoff = 0.0
 		for k in range(1,10,1):
@@ -171,10 +171,16 @@ for i in range(2,12,1):
 		bestSoftPayoff[i][j] = max(softHitPayoff[i][j], standPayoff[i][j], softDoublePayoff[i][j])
 		if (bestSoftPayoff[i][j] == softHitPayoff[i][j]):
 			bestSoftMove[i][j] = "H"
-		elif(bestHardPayoff[i][j] == standPayoff[i][j]):
+		elif(bestSoftPayoff[i][j] == standPayoff[i][j]):
 			bestSoftMove[i][j] = "S"
 		else:
 			bestSoftMove[i][j] = "D"
+		if(j==18 and i==11):
+			print "Printing the incorrect case"
+			print hitPayoff,standPayoff[i][j],doublePayoff
+
+	# 	print standPayoff[i][j],
+	# print
 		# if(j==14 and i==5):
 			# print "Printing the incorrect case"
 			# print hitPayoff,standPayoff[i][j],doublePayoff
@@ -188,6 +194,12 @@ for i in range(2,12,1):
 			# bestSoftMove[i][j] = "S"
 		# else:
 			# bestSoftMove[i][j] = "D"
+# print 
+# print
+# for i in range(2,12,1):
+# 	for j in range(20,12,-1):
+# 		print softDoublePayoff[i][j],
+# 	print
 print
 print
 # print "bestSoftMove"
@@ -197,7 +209,7 @@ print
 	# print
 
 for i in range(2,12,1):
-	for j in range(10,4,-1):
+	for j in range(10,3,-1):
 		hitPayoff = 0.0
 		doublePayoff = 0.0
 		for k in range(1,10,1):
@@ -239,7 +251,46 @@ for i in range(2,12,1):
 			# bestHardMove[i][j] = "S"
 		# else:
 			# bestHardMove[i][j] = "D"
+splitPayoff = [[0.0 for i in range(12)] for i in range(12)]
+bestPairPayoff = [[0.0 for i in range(12)] for i in range(12)]
+bestPairMove = [['' for i in range(12)] for i in range(12)]
+for i in range(2,11):
+	for j in range(2,12):
+		for k in range(2,10):
+			if (i != k):
+				splitPayoff[i][j] += 2 * complement_p * bestHardPayoff[j][i+k]
+		if (i!=10):
+			splitPayoff[i][j] += 2 * p * bestHardPayoff[j][i+10]
+		splitPayoff[i][j] += 2 * complement_p * bestSoftPayoff[j][i+11]
+		if (i != 10):
+			splitPayoff[i][j] *= 1.0/(1-2*complement_p)
+		else:
+			splitPayoff[i][j] *= 1.0/(1-2*p)
+		bestPairPayoff[i][j] = max(splitPayoff[i][j], bestHardPayoff[j][2*i])
+		if (bestPairPayoff[i][j] == splitPayoff[i][j]):
+			bestPairMove[i][j] = "P"
+		else:
+			bestPairMove[i][j] = bestHardMove[j][2*i]
+for j in range(2,12):
+	for k in range(1,10):
+		splitPayoff[11][j] += 2 * complement_p * standPayoff[j][k+11]
+	splitPayoff[11][j] += 2 * p * standPayoff[j][21]
+	bestPairPayoff[11][j] = max(splitPayoff[11][j], bestSoftPayoff[j][12])
+	if (bestPairPayoff[11][j] == splitPayoff[11][j]):
+		bestPairMove[11][j] = "P"
+	else:
+		bestPairMove[11][j] = bestSoftMove[j][12]
 
+print "PAIRS"
+print
+for i in range(2,12):
+	if (i <= 9):
+		print "",i," - ",
+	else:
+		print i," - ",
+	for j in range(2,12):
+		print bestPairMove[i][j],
+	print
 # print "bestHardMove"
 # for i in range(5,22):
 	# for j in range(2,12):
@@ -255,7 +306,8 @@ for i in range(2,12,1):
 # 		split[i][j] = max(bestHardHitOrStandPayoff[j][2*i], 2*lone[i][j])
 # 		lone[i][j] = bestHardHitOrStandPayoff[j][i]
 
-
+print
+print
 print 
 for j in range(5,22):
 	if (j <= 9):
