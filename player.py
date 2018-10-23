@@ -45,7 +45,10 @@ for i in range(16,10,-1):
 				soft[i][j] += complement_p * soft[i+k][j]
 			else:
 				soft[i][j] += complement_p * hard[i+k-10][j]
-		soft[i][j] += p * hard[i][j]
+		if (10 + i <= 21):
+			soft[i][j] += p * soft[i+10][j]
+		else:
+			soft[i][j] += p * hard[i+10-10][j]
 for i in range(5,1,-1):
 	for j in range(6):
 		for k in range(2,10):
