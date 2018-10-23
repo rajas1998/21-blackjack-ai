@@ -28,6 +28,7 @@ for i in range(10,5,-1):
 				hard[i][j] += p * hard[10+i][j]
 		elif j == 5:
 			hard[i][j] += p
+# print hard[5]
 for i in hard:
 	print i," - ",sum(i)
 
@@ -48,7 +49,7 @@ for i in range(16,10,-1):
 		if (10 + i <= 21):
 			soft[i][j] += p * soft[i+10][j]
 		else:
-			soft[i][j] += p * hard[i+10-10][j]
+			soft[i][j] += p * hard[i][j]
 for i in range(5,1,-1):
 	for j in range(6):
 		for k in range(2,10):
@@ -64,9 +65,12 @@ for i in soft:
 	print i," - ",sum(i)
 
 standPayoff = [[0.0 for i in range(22)] for i in range(12)]
+
 for i in range(2,11):
 	for j in range(22):
 		for k in range(5):
+			# if(j==21 and 17 + k < j):
+			# 	standPayoff[i][j] += hard[i][k] * (1.5) #BlackJack
 			if (17 + k > j):
 				standPayoff[i][j] += hard[i][k] * (-1)
 			elif (17 + k < j):
@@ -74,14 +78,17 @@ for i in range(2,11):
 		standPayoff[i][j] += hard[i][5] * 1
 for j in range(22):
 	for k in range(5):
+		# if(j==21 and 17 + k < j):
+		# 	standPayoff[i][j] += soft[i][k] * (1.5) #BlackJack
 		if (17 + k > j):
 			standPayoff[11][j] += soft[11][k] * (-1)
 		elif (17 + k < j):
 			standPayoff[11][j] += soft[11][k] * (1)
 	standPayoff[11][j] += hard[11][5] * 1
+
 standPayoff[11][21] += p * (-1)
 standPayoff[10][21] += complement_p * (-1)
-print
+
 print
 for i in range(len(standPayoff)):
 	print i," ..... ", standPayoff[i]
@@ -124,11 +131,7 @@ for i in range(2,12,1):
 
 print
 print
-# print bestHardMove
-for i in range(22):
-	for j in range(2,12):
-		print bestHardMove[j][i],
-	print
+
 
 bestSoftPayoff = [[0.0 for i in range(22)] for i in range(12)]
 bestSoftMove = [["" for i in range(22)] for i in range(12)]
@@ -154,18 +157,73 @@ for i in range(2,12,1):
 		doublePayoff += 2 * p * standPayoff[i][j]
 
 		bestSoftPayoff[i][j] = max(hitPayoff,standPayoff[i][j],doublePayoff)
+		if(j==14 and i==5):
+			print "Printing the incorrect case"
+			print hitPayoff,standPayoff[i][j],doublePayoff
+		if(j==18 and i==11):
+			print "Printing the incorrect case"
+			print hitPayoff,standPayoff[i][j],doublePayoff
+
 		if(bestSoftPayoff[i][j] == hitPayoff):
 			bestSoftMove[i][j] = "H"
 		elif(bestSoftPayoff[i][j] == standPayoff[i][j]):
 			bestSoftMove[i][j] = "S"
 		else:
 			bestSoftMove[i][j] = "D"
-
 print
 print
-# print bestHardMove
-for i in range(22):
+print "bestSoftMove"
+for i in range(13,21):
 	for j in range(2,12):
 		print bestSoftMove[j][i],
 	print
+
+for i in range(2,12,1):
+	for j in range(10,4,-1):
+		hitPayoff = 0.0
+		doublePayoff = 0.0
+		for k in range(1,10,1):
+			if(k==1):
+				if(j + 11 <=21):
+					hitPayoff += complement_p * bestSoftPayoff[i][j+11]
+					doublePayoff += 2 * complement_p * max(standPayoff[i][k+j], standPayoff[i][11+j])
+				else:
+					hitPayoff += complement_p * bestHardPayoff[i][j+k]
+					doublePayoff += 2 * complement_p * standPayoff[i][k+j]
+			elif (k + j <= 21):
+				hitPayoff += complement_p * bestHardPayoff[i][k+j]
+				doublePayoff += 2 * complement_p * standPayoff[i][k+j]
+			else:
+				hitPayoff += complement_p * (-1)
+				doublePayoff += 2 * complement_p * (-1)
+		if (10 + j <= 21):
+			hitPayoff += p * bestHardPayoff[i][10+j]
+			doublePayoff += 2 * p * standPayoff[i][10+j]
+		else:
+			hitPayoff += p * (-1)
+			doublePayoff += 2 * p * (-1)
+
+		bestHardPayoff[i][j] = max(hitPayoff,standPayoff[i][j],doublePayoff)
+		if(i==3 and j==9):
+			print hitPayoff,standPayoff[i][j],doublePayoff
+		if(bestHardPayoff[i][j] == hitPayoff):
+			bestHardMove[i][j] = "H"
+		elif(bestHardPayoff[i][j] == standPayoff[i][j]):
+			bestHardMove[i][j] = "S"
+		else:
+			bestHardMove[i][j] = "D"
+
+print "bestHardMove"
+for i in range(5,22):
+	for j in range(2,12):
+		print bestHardMove[j][i],
+	print
 ###########################################
+
+# split = [[0.0 for i in range(12)] for i in range(12)]
+# lone = [[0.0 for i in range(12)] for i in range(12)] #2,3......11->A
+#
+# for i in range(2,12): #My Pair
+# 	for j in range(2,12): #Dealer's Card
+# 		split[i][j] = max(bestHardPayoff[j][2*i], 2*lone[i][j])
+# 		lone[i][j] = bestHardPayoff[j][i]
