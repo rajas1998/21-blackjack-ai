@@ -261,7 +261,15 @@ for i in range(2,11):
 				splitPayoff[i][j] += 2 * complement_p * bestHardPayoff[j][i+k]
 		if (i!=10):
 			splitPayoff[i][j] += 2 * p * bestHardPayoff[j][i+10]
-		splitPayoff[i][j] += 2 * complement_p * bestSoftPayoff[j][i+11]
+		if (i!=10):
+			splitPayoff[i][j] += 2 * complement_p * bestSoftPayoff[j][i+11]
+		else:
+			prob_dealer_blackjack = 0.0
+			if (j == 10):
+				prob_dealer_blackjack = p
+			else:
+				prob_dealer_blackjack = complement_p
+			splitPayoff[i][j] += 2 * complement_p * (1 - prob_dealer_blackjack) * 1.5
 		if (i != 10):
 			splitPayoff[i][j] *= 1.0/(1-2*complement_p)
 		else:
@@ -275,6 +283,15 @@ for j in range(2,12):
 	for k in range(1,10):
 		splitPayoff[11][j] += 2 * complement_p * standPayoff[j][k+11]
 	splitPayoff[11][j] += 2 * p * standPayoff[j][21]
+	# if (j != 10 and j != 11):
+	# 	splitPayoff[11][j] += 2 * p * 1.5
+	# else:
+	# 	prob_dealer_blackjack = 0.0
+	# 	if (j == 10):
+	# 		prob_dealer_blackjack = p
+	# 	else:
+	# 		prob_dealer_blackjack = complement_p
+	# 	splitPayoff[11][j] += 2 * p * (1 - prob_dealer_blackjack) * 1.5
 	bestPairPayoff[11][j] = max(splitPayoff[11][j], bestSoftPayoff[j][12])
 	if (bestPairPayoff[11][j] == splitPayoff[11][j]):
 		bestPairMove[11][j] = "P"
