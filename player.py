@@ -291,7 +291,7 @@ for j in range(2,12):
 # 	print
 
 f = open('Policy.txt', 'w')
-for i in range(5,22):
+for i in range(5,20):
 	print >>f,i,"\t",
 	for j in range(2,12):
 		print >>f,bestHardMove[j][i],
