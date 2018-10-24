@@ -69,8 +69,9 @@ standPayoff = [[0.0 for i in range(22)] for i in range(12)]
 for i in range(2,11):
 	for j in range(22):
 		for k in range(5):
-			# if(j==21 and 17 + k < j):
-			# 	standPayoff[i][j] += hard[i][k] * (1.5) #BlackJack
+			# if(j==21):#Means this is a blackJack
+			# 	if(k + i < j or k + i > j):
+			# 		standPayoff[i][j] += hard[i][k] * (1.5)
 			if (17 + k > j):
 				standPayoff[i][j] += hard[i][k] * (-1)
 			elif (17 + k < j):
@@ -78,8 +79,9 @@ for i in range(2,11):
 		standPayoff[i][j] += hard[i][5] * 1
 for j in range(22):
 	for k in range(5):
-		# if(j==21 and 17 + k < j):
-		# 	standPayoff[i][j] += soft[i][k] * (1.5) #BlackJack
+		# if(j==21):#Means this is a blackJack
+		# 	if(k + 11 < j or k + 11 > j):
+		# 		standPayoff[11][j] += hard[11][k] * (1.5)
 		if (17 + k > j):
 			standPayoff[11][j] += soft[11][k] * (-1)
 		elif (17 + k < j):
@@ -157,12 +159,12 @@ for i in range(2,12,1):
 		doublePayoff += 2 * p * standPayoff[i][j]
 
 		bestSoftPayoff[i][j] = max(hitPayoff,standPayoff[i][j],doublePayoff)
-		if(j==14 and i==5):
-			print "Printing the incorrect case"
-			print hitPayoff,standPayoff[i][j],doublePayoff
-		if(j==18 and i==11):
-			print "Printing the incorrect case"
-			print hitPayoff,standPayoff[i][j],doublePayoff
+		# if(j==14 and i==5):
+		# 	print "Printing the incorrect case"
+		# 	print hitPayoff,standPayoff[i][j],doublePayoff
+		# if(j==18 and i==11):
+		# 	print "Printing the incorrect case"
+		# 	print hitPayoff,standPayoff[i][j],doublePayoff
 
 		if(bestSoftPayoff[i][j] == hitPayoff):
 			bestSoftMove[i][j] = "H"
@@ -170,7 +172,14 @@ for i in range(2,12,1):
 			bestSoftMove[i][j] = "S"
 		else:
 			bestSoftMove[i][j] = "D"
+		print doublePayoff,
+	print
 print
+print "StandPayoff"
+for i in range(2,12,1):
+	for j in range(20,12,-1):
+		print standPayoff[i][j],
+	print
 print
 print "bestSoftMove"
 for i in range(13,21):
@@ -205,14 +214,16 @@ for i in range(2,12,1):
 
 		bestHardPayoff[i][j] = max(hitPayoff,standPayoff[i][j],doublePayoff)
 		if(i==3 and j==9):
-			print hitPayoff,standPayoff[i][j],doublePayoff
+			print "hitPlayoff=",hitPayoff,"standPlayoff=",standPayoff[i][j],"DoublePlayoff=",doublePayoff
 		if(bestHardPayoff[i][j] == hitPayoff):
 			bestHardMove[i][j] = "H"
 		elif(bestHardPayoff[i][j] == standPayoff[i][j]):
 			bestHardMove[i][j] = "S"
 		else:
 			bestHardMove[i][j] = "D"
-
+		print standPayoff[i][j],
+	print
+print
 print "bestHardMove"
 for i in range(5,22):
 	for j in range(2,12):
