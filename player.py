@@ -301,7 +301,7 @@ count=2
 for i in range(13,21):
 	print >>f,"A"+str(count)+"\t",
 	for j in range(2,12):
-		print >>f,bestHardMove[j][i],
+		print >>f,bestSoftMove[j][i],
 	print >>f
 	count += 1
 
