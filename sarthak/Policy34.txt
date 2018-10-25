@@ -14,7 +14,7 @@
 18	S S S S S S S S S S
 19	S S S S S S S S S S
 A2	H H H D D H H H H H
-A3	H H H D D H H H H H
+A3	H H D D D H H H H H
 A4	H H D D D H H H H H
 A5	H D D D D H H H H H
 A6	D D D D D H H H H H
@@ -29,5 +29,5 @@ A9	S S S S S S S S S S
 77	P P P P P P H H H H
 88	P P P P P P P P S H
 99	P P P P P S P P S S
-1010	S S S S P S S S S S
+1010	S S S P P S S S S S
 AA	P P P P P P P P P H

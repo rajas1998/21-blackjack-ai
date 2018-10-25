@@ -1,7 +1,10 @@
 import sys
 args = sys.argv
+
 p = float(args[1])
 # p = float(raw_input())
+
+
 complement_p = (1-p)/9
 hard = [[0.0 for i in range(6)] for i in range(22)]
 hard[21][4] = 1
@@ -231,9 +234,9 @@ for i in range(2,11):
 			splitPayoff[i][j] += 2 * complement_p * bestSoftPayoff[j][i+11]
 		else:
 			prob_dealer_blackjack = 0.0
-			if (j == 10):
+			if (j == 11):
 				prob_dealer_blackjack = p
-			else:
+			elif (j == 10):
 				prob_dealer_blackjack = complement_p
 			splitPayoff[i][j] += 2 * complement_p * (1 - prob_dealer_blackjack) * 1.5
 		if (i != 10):
@@ -290,28 +293,46 @@ for j in range(2,12):
 # 		print bestSoftMove[i][j],
 # 	print
 
-f = open('Policy.txt', 'w')
+f = open("Policy.txt", 'w')
+s=""
 for i in range(5,20):
-	print >>f,i,"\t",
-	for j in range(2,12):
-		print >>f,bestHardMove[j][i],
-	print >>f
+	s=""
+	s = s + str(i) + "\t"
+	# print >>f,i,"\t",
+	for j in range(2,11):
+		s = s+ bestHardMove[j][i] + " "
+	s = s+ bestHardMove[11][i]
+		# print >>f,bestHardMove[j][i],
+	print >>f,s
 
 count=2
 for i in range(13,21):
-	print >>f,"A"+str(count)+"\t",
-	for j in range(2,12):
-		print >>f,bestSoftMove[j][i],
-	print >>f
+	s=""
+	# print >>f,"A"+str(count)+"\t",
+	s = s+ "A"+str(count)+"\t"
+	for j in range(2,11):
+		s=s+bestSoftMove[j][i] + " "
+		# print >>f,bestSoftMove[j][i],
+	# print >>f
+	s = s+ bestSoftMove[11][i]
+	print >> f,s
 	count += 1
 
 for i in range(2,11):
-	print>>f, str(i)+str(i)+"\t",
-	for j in range(2,12):
-		print>>f, bestPairMove[i][j],
-	print >>f
-print >>f, "AA\t",
-for j in range(2,12):
-	print>>f, bestPairMove[11][j],
-
+	s=""
+	s=s+str(i)+str(i)+"\t"
+	# print>>f, str(i)+str(i)+"\t",
+	for j in range(2,11):
+		s=s+bestPairMove[i][j] + " "
+		# print>>f, bestPairMove[i][j],
+	s=s+ bestPairMove[i][11]
+	print >>f,s
+s=""
+s=s+"AA\t"
+# print >>f, "AA\t",
+for j in range(2,11):
+	s=s+bestPairMove[11][j]+" "
+	# print>>f, bestPairMove[11][j],
+s=s+bestPairMove[11][11]
+print >>f, s
 f.close()
