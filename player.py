@@ -334,5 +334,5 @@ for j in range(2,11):
 	s=s+bestPairMove[11][j]+" "
 	# print>>f, bestPairMove[11][j],
 s=s+bestPairMove[11][11]
-print >>f, s
+print >>f,s,
 f.close()
